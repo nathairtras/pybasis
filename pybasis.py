@@ -31,3 +31,7 @@ class API:
     def getPoints(self):
         resp = self.session.get("https://app.mybasis.com/api/v1/points", headers=self.headers)
         self.points = resp.json()['points']
+
+    def sleepData(self,date):
+        resp = self.session.get("https://app.mybasis.com/api/v2/users/me/days/"+ str(date) + "/activities?type=sleep&expand=activities.stages,activities.events",headers=self.headers)
+        return resp.json()['content']['activities']
