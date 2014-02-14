@@ -5,18 +5,28 @@ PyBasis :: An unofficial Basis python API client
 __author__ = 'jay weiler'
 __version__ = "0.0.1"
 
-import datetime
 import arrow
 from requests import Session
 
 class API:
 
-    def __init__(self, username,password):
+    def __init__(self, username, password):
         self.username = username
         self.password = password
 
         self.me = None
         self.points = None
+
+        self.first_name = None
+        self.last_name = None
+        self.full_name = None
+        self.email = None
+        self.joined = None
+        self.level = None
+        self.id = None
+        self.device = None
+        self.last_synced = None
+        self.anatomy = None
 
         self.session = Session()
         self.login_payload = {"next": "https://app.mybasis.com", "username": self.username, "password": self.password, "submit": "Login"}
@@ -26,13 +36,31 @@ class API:
         self.refresh_token = self.session.cookies['refresh_token']
         self.headers = {"X-Basis-Authorization": "OAuth "+self.access_token}
 
+
+    # Profile Methods
+    # ===============
+
     def getMe(self):
         resp = self.session.get("https://app.mybasis.com/api/v1/user/me.json", headers=self.headers)
         self.me = resp.json()
+        self.first_name = self.me['profile']['first_name']
+        self.last_name = self.me['profile']['last_name']
+        self.full_name = self.me['profile']['full_name']
+        self.email = self.me['email']
+        self.joined = arrow.get(self.me['profile']['joined'])
+        self.level = self.me['level']
+        self.id = self.me['id']
+        self.device = self.me['device']
+        self.last_synced = arrow.get(self.me['last_synced'])
+        self.anatomy = self.me['anatomy']
 
     def getPoints(self):
         resp = self.session.get("https://app.mybasis.com/api/v1/points", headers=self.headers)
         self.points = resp.json()['points']
+
+
+    # Sleep Methods
+    # =============
 
     def sleepData(self,date):
         date = arrow.get(date)
