@@ -8,7 +8,10 @@ __version__ = "0.0.1"
 import arrow
 from requests import Session
 
-class API:
+class basis:
+    '''
+    Basis connection object
+    '''
 
     def __init__(self, username, password):
         self.username = username
@@ -37,10 +40,13 @@ class API:
         self.headers = {"X-Basis-Authorization": "OAuth "+self.access_token}
 
 
-    # Profile Methods
+    # Profile Intialization Methods
     # ===============
 
     def getMe(self):
+        '''
+        This will grab profile information like name, id, etc. Not necessary for calls below to work.
+        '''
         resp = self.session.get("https://app.mybasis.com/api/v1/user/me.json", headers=self.headers)
         self.me = resp.json()
         self.first_name = self.me['profile']['first_name']
@@ -55,6 +61,9 @@ class API:
         self.anatomy = self.me['anatomy']
 
     def getPoints(self):
+        '''
+        This will grab the number of points. Not neccessary for method to work.
+        '''
         resp = self.session.get("https://app.mybasis.com/api/v1/points", headers=self.headers)
         self.points = resp.json()['points']
 
@@ -63,21 +72,33 @@ class API:
     # =============
 
     def sleepData(self,date):
+        '''
+        Get sleep data for a date - can take a string in YYYY-MM-DD, datetime or arrow objects.
+        '''
         date = arrow.get(date)
         resp = self.session.get("https://app.mybasis.com/api/v2/users/me/days/" + date.format('YYYY-MM-DD') + "/activities?type=sleep&expand=activities.stages,activities.events", headers=self.headers)
         return resp.json()['content']['activities']
 
     def sleepSummary(self,date):
+        '''
+        Get sleep summary for a date - can take a string in YYYY-MM-DD, datetime or arrow objects.
+        '''
         date = arrow.get(date)
         resp = self.session.get("https://app.mybasis.com/api/v2/users/me/days/" + date.format('YYYY-MM-DD') + "/summary/activities/sleep", headers=self.headers)
         return resp.json()['content']
 
     def sleepActivities(self,date):
+        '''
+        Get sleep activities for a date - can take a string in YYYY-MM-DD, datetime or arrow objects.
+        '''
         date = arrow.get(date)
         resp = self.session.get("https://app.mybasis.com/api/v2/users/me/days/" + date.format('YYYY-MM-DD') + "/activities?type=sleep", headers=self.headers)
         return resp.json()['content']
 
     def crawlSleep(self, startdate, enddate):
+        '''
+        Gets sleep data for all dates in the range and returns them all in a list.
+        '''
         sleepList = []
         startdate = arrow.get(startdate)
         enddate = arrow.get(enddate)
