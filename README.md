@@ -17,7 +17,7 @@ Usage:
 ```python
 
 >>> import pybasis
->>> api = pybasis.basis("username","password")
+>>> api = pybasis.basisAPI("username","password")
 
 >>> api.sleepData('2014-02-12')
 [{u'actual_seconds': 7320,
@@ -28,7 +28,8 @@ Usage:
                 u'timestamp': 1392288420},
   u'events': [{u'time': {u'iso': u'2014-02-13T09:19:00Z',
   ...
-  },  { ... },
+  },
+  { ... },
   ...]
   
 >>> api.sleepSummary('2014-02-12')
@@ -51,7 +52,10 @@ u'toss_and_turn': 6}
                 u'timestamp': 1392288420},
   u'events': [{u'time': {u'iso': u'2014-02-13T09:19:00Z',
   ...
-  },  { ... },
+  },
+  { ... },
   { ... },
   ...]
-```
+
+
+```

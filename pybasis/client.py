@@ -1,14 +1,7 @@
-"""
-PyBasis :: An unofficial Basis python API client
-"""
-
-__author__ = 'jay weiler'
-__version__ = "0.0.1"
-
 import arrow
 from requests import Session
 
-class basis:
+class basisAPI:
     '''
     Basis connection object
     '''
@@ -40,7 +33,7 @@ class basis:
         self.headers = {"X-Basis-Authorization": "OAuth "+self.access_token}
 
 
-    # Profile Intialization Methods
+    # Profile Initialization Methods
     # ===============
 
     def getMe(self):
@@ -109,3 +102,4 @@ class basis:
                 sleepList.append(sleep)
 
         return sleepList
+
