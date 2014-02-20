@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Pybasis by Akrasiac</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Pybasis</h1>
+        <h2>An unofficial Basis python API client</h2>
+        <a href="https://github.com/Akrasiac/pybasis" class="button"><small>View project on</small>GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a name="pybasis" class="anchor" href="#pybasis"><span class="octicon octicon-link"></span></a>pybasis</h1>
+
+<p>Unofficial python library for accessing the Basis API at <a href="https://app.mybasis.com">https://app.mybasis.com</a></p>
+
+<p><strong>Only supports sleep data at the moment</strong></p>
+
+<p>Heavily inspired by <a href="https://github.com/hof">hof</a>'s <a href="https://github.com/hof/basis-java-api">basis-java-api</a></p>
+
+<p>Requirements: </p>
+
+<ul>
+<li><a href="http://requests.readthedocs.org/en/latest/">requests</a></li>
+<li><a href="http://crsmithdev.com/arrow/">arrow</a></li>
+</ul><p>Usage:</p>
+
+<div class="highlight highlight-python"><pre>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">pybasis</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">api</span> <span class="o">=</span> <span class="n">pybasis</span><span class="o">.</span><span class="n">basis</span><span class="p">(</span><span class="s">"username"</span><span class="p">,</span><span class="s">"password"</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">api</span><span class="o">.</span><span class="n">sleepData</span><span class="p">(</span><span class="s">'2014-02-12'</span><span class="p">)</span>
+<span class="p">[{</span><span class="s">u'actual_seconds'</span><span class="p">:</span> <span class="mi">7320</span><span class="p">,</span>
+  <span class="s">u'calories'</span><span class="p">:</span> <span class="mf">145.5</span><span class="p">,</span>
+  <span class="s">u'end_time'</span><span class="p">:</span> <span class="p">{</span><span class="s">u'iso'</span><span class="p">:</span> <span class="s">u'2014-02-13T10:47:00Z'</span><span class="p">,</span>
+                <span class="s">u'time_zone'</span><span class="p">:</span> <span class="p">{</span><span class="s">u'name'</span><span class="p">:</span> <span class="s">u'America/Los_Angeles'</span><span class="p">,</span>
+                               <span class="s">u'offset'</span><span class="p">:</span> <span class="o">-</span><span class="mi">480</span><span class="p">},</span>
+                <span class="s">u'timestamp'</span><span class="p">:</span> <span class="mi">1392288420</span><span class="p">},</span>
+  <span class="s">u'events'</span><span class="p">:</span> <span class="p">[{</span><span class="s">u'time'</span><span class="p">:</span> <span class="p">{</span><span class="s">u'iso'</span><span class="p">:</span> <span class="s">u'2014-02-13T09:19:00Z'</span><span class="p">,</span>
+  <span class="o">...</span>
+  <span class="p">},</span>
+  <span class="p">{</span> <span class="o">...</span> <span class="p">},</span>
+  <span class="o">...</span><span class="p">]</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">api</span><span class="o">.</span><span class="n">sleepSummary</span><span class="p">(</span><span class="s">'2014-02-12'</span><span class="p">)</span>
+<span class="p">{</span><span class="s">u'heart_rate'</span><span class="p">:</span> <span class="p">{</span><span class="s">u'avg'</span><span class="p">:</span> <span class="mf">58.76611901575547</span><span class="p">},</span> 
+<span class="s">u'interruption_minutes'</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s">u'minutes'</span><span class="p">:</span> <span class="mi">215</span><span class="p">,</span> <span class="s">u'calories'</span><span class="p">:</span> <span class="mf">461.09999999999997</span><span class="p">,</span> 
+<span class="s">u'rem_minutes'</span><span class="p">:</span> <span class="mi">74</span><span class="p">,</span> <span class="s">u'light_minutes'</span><span class="p">:</span> <span class="mi">255</span><span class="p">,</span> <span class="s">u'deep_minutes'</span><span class="p">:</span> <span class="mi">60</span><span class="p">,</span> 
+<span class="s">u'date'</span><span class="p">:</span> <span class="s">u'2014-02-12'</span><span class="p">,</span> <span class="s">u'interruptions'</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s">u'quality'</span><span class="p">:</span> <span class="mf">31.0</span><span class="p">,</span> 
+<span class="s">u'toss_and_turn'</span><span class="p">:</span> <span class="mi">6</span><span class="p">}</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">api</span><span class="o">.</span><span class="n">sleepActivities</span><span class="p">(</span><span class="s">'2014-02-12'</span><span class="p">)</span>
+<span class="p">{</span><span class="s">u'activities'</span><span class="p">:</span> <span class="p">[{</span><span class="s">u'type'</span><span class="p">:</span> <span class="s">u'sleep'</span><span class="p">,</span> <span class="s">u'link'</span><span class="p">:</span> <span class="s">u'/v2/users/51635464rts10031da/activities/52fe5050ee8f134da5914f65'</span><span class="p">},</span> 
+<span class="p">{</span><span class="s">u'type'</span><span class="p">:</span> <span class="s">u'sleep'</span><span class="p">,</span> <span class="s">u'link'</span><span class="p">:</span> <span class="s">u'/v2/users/51635464rts10031da/activities/52fe5050ee8f134da5914f67'</span><span class="p">}]}</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">api</span><span class="o">.</span><span class="n">crawlSleep</span><span class="p">(</span><span class="s">'2014-02-05'</span><span class="p">,</span><span class="s">'2014-02-12'</span><span class="p">)</span>
+<span class="p">[{</span><span class="s">u'actual_seconds'</span><span class="p">:</span> <span class="mi">7320</span><span class="p">,</span>
+  <span class="s">u'calories'</span><span class="p">:</span> <span class="mf">145.5</span><span class="p">,</span>
+  <span class="s">u'end_time'</span><span class="p">:</span> <span class="p">{</span><span class="s">u'iso'</span><span class="p">:</span> <span class="s">u'2014-02-13T10:47:00Z'</span><span class="p">,</span>
+                <span class="s">u'time_zone'</span><span class="p">:</span> <span class="p">{</span><span class="s">u'name'</span><span class="p">:</span> <span class="s">u'America/Los_Angeles'</span><span class="p">,</span>
+                               <span class="s">u'offset'</span><span class="p">:</span> <span class="o">-</span><span class="mi">480</span><span class="p">},</span>
+                <span class="s">u'timestamp'</span><span class="p">:</span> <span class="mi">1392288420</span><span class="p">},</span>
+  <span class="s">u'events'</span><span class="p">:</span> <span class="p">[{</span><span class="s">u'time'</span><span class="p">:</span> <span class="p">{</span><span class="s">u'iso'</span><span class="p">:</span> <span class="s">u'2014-02-13T09:19:00Z'</span><span class="p">,</span>
+  <span class="o">...</span>
+  <span class="p">},</span>
+  <span class="p">{</span> <span class="o">...</span> <span class="p">},</span>
+  <span class="p">{</span> <span class="o">...</span> <span class="p">},</span>
+  <span class="o">...</span><span class="p">]</span>
+
+
+</pre></div>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/Akrasiac/pybasis/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/Akrasiac/pybasis/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/Akrasiac/pybasis"></a> is maintained by <a href="https://github.com/Akrasiac">Akrasiac</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
