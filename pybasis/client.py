@@ -110,13 +110,33 @@ class basisAPI:
     # Physiological Data
     # ==================
 
-    def physData(self,date):
+    def physData(self, startdate, enddate=None, metric=None):
         '''
-        Get physiological data for the date, over 60 second intervals
+        Get physiological data for a date over 60 second intervals -- can take a string in 
+        YYYY-MM-DD, datetime or arrow object. If enddate and metric arguments passed (steps, 
+        heartrate, calories, skin_temp, gsr) are specified, gets physiological data for all 
+        dates in the range and returns metric in a list. 
+
+        *gsr is skin perspiration
+        
         '''
-        date = arrow.get(date)
-        resp = self.session.get("https://app.mybasis.com/api/v1/chart/me?summary=true&interval=60&units=ms&start_date=" + date.format('YYYY-MM-DD') + "&start_offset=0&end_offset=0&heartrate=true&steps=true&calories=true&gsr=true&skin_temp=true&air_temp=true&bodystates=true", headers=self.headers)
-        return resp.json()
+        startdate = arrow.get(startdate)
+
+        if enddate and metric:
+            enddate = arrow.get(enddate)
+            physList = []
+
+            dates = [r.format('YYYY-MM-DD') for r in arrow.Arrow.range('day', startdate, enddate)]
+            for date in dates:
+                data = self.physData(date)['metrics'][metric]['values']
+                for phys in data:
+                    physList.append(phys)
+
+            return physList
+
+        else:
+            resp = self.session.get("https://app.mybasis.com/api/v1/chart/me?summary=true&interval=60&units=ms&start_date=" + startdate.format('YYYY-MM-DD') + "&start_offset=0&end_offset=0&heartrate=true&steps=true&calories=true&gsr=true&skin_temp=true&air_temp=true&bodystates=true", headers=self.headers)
+            return resp.json()
 
     # def crawlPhys(self, startdate, enddate):
     #     '''
