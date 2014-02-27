@@ -72,38 +72,63 @@ class basisAPI:
         If enddate is specified, gets sleep data for all dates in the range and returns them all in a list.
         '''
         startdate = arrow.get(startdate)
+        sleepList = []
 
         if enddate:
             enddate = arrow.get(enddate)
-            sleepList = []
 
             dates = [r.format('YYYY-MM-DD') for r in arrow.Arrow.range('day', startdate, enddate)]
             for date in dates:
                 data = self.sleepData(date)
-                for sleep in data:
-                    sleepList.append(sleep)
+                sleepList += data
 
-            return sleepList
 
         else:
             resp = self.session.get("https://app.mybasis.com/api/v2/users/me/days/" + startdate.format('YYYY-MM-DD') + "/activities?type=sleep&expand=activities.stages,activities.events", headers=self.headers)
-            return resp.json()['content']['activities']
+            sleepList += resp.json()['content']['activities']
 
-    def sleepSummary(self,date):
+        return sleepList
+
+    def sleepSummary(self,startdate,enddate=None):
         '''
         Get sleep summary for a date - can take a string in YYYY-MM-DD, datetime or arrow objects.
         '''
-        date = arrow.get(date)
-        resp = self.session.get("https://app.mybasis.com/api/v2/users/me/days/" + date.format('YYYY-MM-DD') + "/summary/activities/sleep", headers=self.headers)
-        return resp.json()['content']
+        startdate = arrow.get(startdate)
+        sleepList = []
 
-    def sleepActivities(self,date):
+        if enddate:
+            enddate = arrow.get(enddate)
+            dates = [r.format('YYYY-MM-DD') for r in arrow.Arrow.range('day', startdate, enddate)]
+            for date in dates:
+                data = self.sleepSummary(date)
+                sleepList += data
+
+        else:
+            resp = self.session.get("https://app.mybasis.com/api/v2/users/me/days/" + startdate.format('YYYY-MM-DD') + "/summary/activities/sleep", headers=self.headers)
+            sleepList.append(resp.json()['content'])
+
+        return  sleepList
+
+    def sleepActivities(self,startdate,enddate=None):
         '''
         Get sleep activities for a date - can take a string in YYYY-MM-DD, datetime or arrow objects.
         '''
-        date = arrow.get(date)
-        resp = self.session.get("https://app.mybasis.com/api/v2/users/me/days/" + date.format('YYYY-MM-DD') + "/activities?type=sleep", headers=self.headers)
-        return resp.json()['content']
+
+        startdate = arrow.get(startdate)
+        sleepList = []
+
+        if enddate:
+            enddate = arrow.get(enddate)
+            dates = [r.format('YYYY-MM-DD') for r in arrow.Arrow.range('day', startdate, enddate)]
+            for date in dates:
+                data = self.sleepActivities(date)
+                sleepList += data
+
+        else:
+            resp = self.session.get("https://app.mybasis.com/api/v2/users/me/days/" + startdate.format('YYYY-MM-DD') + "/activities?type=sleep", headers=self.headers)
+            sleepList += resp.json()['content']['activities']
+
+        return sleepList
 
 
 
