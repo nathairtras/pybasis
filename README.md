@@ -5,13 +5,12 @@ Unofficial python library for accessing the Basis API at https://app.mybasis.com
 
 Heavily inspired by [hof](https://github.com/hof)'s [basis-java-api](https://github.com/hof/basis-java-api)
 
-### Install
+Requirements: 
 
-```python
-pip install pybasis
-```
+- [requests](http://requests.readthedocs.org/en/latest/)
+- [arrow](http://crsmithdev.com/arrow/)
 
-### Usage
+Usage:
 
 ```python
 
@@ -44,16 +43,16 @@ pip install pybasis
   { ... },
   { ... },
   ...]
-
+  
 >>> api.sleepSummary('2014-02-12')
-{u'heart_rate': {u'avg': 58.76611901575547},
-u'interruption_minutes': 0, u'minutes': 215, u'calories': 461.09999999999997,
-u'rem_minutes': 74, u'light_minutes': 255, u'deep_minutes': 60,
-u'date': u'2014-02-12', u'interruptions': 0.0, u'quality': 31.0,
+{u'heart_rate': {u'avg': 58.76611901575547}, 
+u'interruption_minutes': 0, u'minutes': 215, u'calories': 461.09999999999997, 
+u'rem_minutes': 74, u'light_minutes': 255, u'deep_minutes': 60, 
+u'date': u'2014-02-12', u'interruptions': 0.0, u'quality': 31.0, 
 u'toss_and_turn': 6}
 
 >>> api.sleepActivities('2014-02-12')
-{u'activities': [{u'type': u'sleep', u'link': u'/v2/users/51635464rts10031da/activities/52fe5050ee8f134da5914f65'},
+{u'activities': [{u'type': u'sleep', u'link': u'/v2/users/51635464rts10031da/activities/52fe5050ee8f134da5914f65'}, 
 {u'type': u'sleep', u'link': u'/v2/users/51635464rts10031da/activities/52fe5050ee8f134da5914f67'}]}
 
 >>> api.physData('2014-02-12')
