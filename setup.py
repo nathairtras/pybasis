@@ -6,5 +6,5 @@ setup(name='pybasis',
       author='Jay Weiler',
       author_email='jweiler@gmail.com',
       url='https://github.com/jayweiler/pybasis',
-      packages=['requests', 'arrow'],
+      packages=['pybasis'],
     )
