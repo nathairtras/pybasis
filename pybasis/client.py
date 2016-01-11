@@ -1,7 +1,7 @@
 import arrow
 from requests import Session
 
-class basisAPI:
+class BasisAPI:
     """ Basis connection object
 
     :param str username: The username or email you use to log in to the Basis site
@@ -37,11 +37,11 @@ class basisAPI:
 
     # Profile Initialization Methods
     # ===============
-
-    def getMe(self):
-        '''
+    
+    def profile_info(self):
+        """
         This will grab profile information like name, id, etc. Not necessary for methods below to work.
-        '''
+        """
         resp = self.session.get("https://app.mybasis.com/api/v1/user/me.json", headers=self.headers)
         self.me = resp.json()
         self.first_name = self.me['profile']['first_name']
@@ -55,10 +55,10 @@ class basisAPI:
         self.last_synced = arrow.get(self.me['last_synced'])
         self.anatomy = self.me['anatomy']
 
-    def getPoints(self):
-        '''
+    def points(self):
+        """
         This will grab the number of points. Not necessary for methods below to work.
-        '''
+        """
         resp = self.session.get("https://app.mybasis.com/api/v1/points", headers=self.headers)
         self.points = resp.json()['points']
 
@@ -66,90 +66,87 @@ class basisAPI:
     # Sleep Methods
     # =============
 
-    def sleepData(self,startdate, enddate=None):
-        '''
+    def sleep_data(self,startdate, enddate=None):
+        """
         Returns a list of sleep data for a date - can take a string in YYYY-MM-DD, datetime or arrow objects.
         If enddate is specified, gets sleep data for all dates in the range and returns them all in the list.
-        '''
+        """
         startdate = arrow.get(startdate)
-        sleepList = []
+        results = []
 
         if enddate:
             enddate = arrow.get(enddate)
 
             dates = [r.format('YYYY-MM-DD') for r in arrow.Arrow.range('day', startdate, enddate)]
             for date in dates:
-                data = self.sleepData(date)
-                sleepList += data
+                data = self.sleep_data(date)
+                results += data
 
 
         else:
             resp = self.session.get("https://app.mybasis.com/api/v2/users/me/days/" + startdate.format('YYYY-MM-DD') + "/activities?type=sleep&expand=activities.stages,activities.events", headers=self.headers)
-            sleepList += resp.json()['content']['activities']
+            results += resp.json()['content']['activities']
 
-        return sleepList
+        return results
 
-    def sleepSummary(self,startdate,enddate=None):
-        '''
+    def sleep_summary(self,startdate,enddate=None):
+        """
         Returns a list with the sleep summary for a date as the element - can take a string in YYYY-MM-DD, datetime or
         arrow objects.
         If enddate is specified, gets sleep summaries for all dates in the range and returns them all as elements in the
         list.
-        '''
+        """
         startdate = arrow.get(startdate)
-        sleepList = []
+        results = []
 
         if enddate:
             enddate = arrow.get(enddate)
             dates = [r.format('YYYY-MM-DD') for r in arrow.Arrow.range('day', startdate, enddate)]
             for date in dates:
-                data = self.sleepSummary(date)
-                sleepList += data
+                data = self.sleep_summary(date)
+                results += data
 
         else:
             resp = self.session.get("https://app.mybasis.com/api/v2/users/me/days/" + startdate.format('YYYY-MM-DD') + "/summary/activities/sleep", headers=self.headers)
-            sleepList.append(resp.json()['content'])
+            results.append(resp.json()['content'])
 
-        return  sleepList
+        return  results
 
-    def sleepActivities(self,startdate,enddate=None):
-        '''
+    def sleep_activities(self,startdate,enddate=None):
+        """
         Returns a list of sleep activities for a date - can take a string in YYYY-MM-DD, datetime or arrow objects.
         If enddate is specified, gets sleep activities for all dates in the range.
-        '''
+        """
 
         startdate = arrow.get(startdate)
-        sleepList = []
+        results = []
 
         if enddate:
             enddate = arrow.get(enddate)
             dates = [r.format('YYYY-MM-DD') for r in arrow.Arrow.range('day', startdate, enddate)]
             for date in dates:
-                data = self.sleepActivities(date)
-                sleepList += data
+                data = self.sleep_activities(date)
+                results += data
 
         else:
             resp = self.session.get("https://app.mybasis.com/api/v2/users/me/days/" + startdate.format('YYYY-MM-DD') + "/activities?type=sleep", headers=self.headers)
-            sleepList += resp.json()['content']['activities']
+            results += resp.json()['content']['activities']
 
-        return sleepList
+        return results
 
 
 
     # Physiological Data
     # ==================
 
-    def physData(self, startdate, enddate=None):
-        '''
+    def phys_data(self, startdate, enddate=None):
+        """
         Get physiological data for a date over 60 second intervals -- can take a string in 
         YYYY-MM-DD, datetime or arrow object. If enddate and metric arguments passed  are specified, gets physiological data for all
         dates in the range and returns metric in a list.
-
-
-
-        '''
+        """
         startdate = arrow.get(startdate)
-        physList = []
+        results = []
 
         if enddate:
             enddate = arrow.get(enddate)
@@ -157,17 +154,19 @@ class basisAPI:
 
             dates = [r.format('YYYY-MM-DD') for r in arrow.Arrow.range('day', startdate, enddate)]
             for date in dates:
-                data = self.physData(date)
-                physList += data
+                data = self.phys_data(date)
+                results += data
 
         else:
-            resp = self.session.get("https://app.mybasis.com/api/v1/chart/me?summary=true&interval=60&units=ms&start_date=" + startdate.format('YYYY-MM-DD') + "&start_offset=0&end_offset=0&heartrate=true&steps=true&calories=true&gsr=true&skin_temp=true&air_temp=true&bodystates=true", headers=self.headers)
-            physList.append(resp.json())
+            # this endpoint seems broken
+            # resp = self.session.get("https://app.mybasis.com/api/v1/chart/me?summary=true&interval=60&units=ms&start_date=" + startdate.format('YYYY-MM-DD') + "&start_offset=0&end_offset=0&heartrate=true&steps=true&calories=true&gsr=true&skin_temp=true&air_temp=true&bodystates=true", headers=self.headers)
+            resp = self.session.get("https://app.mybasis.com/api/v1/metricsday/me?day=" + startdate.format('YYYY-MM-DD') + "&heartrate=true&steps=true&calories=true&gsr=true&skin_temp=true&bodystates=true", headers=self.headers)
+            results.append(resp.json())
 
-        return physList
+        return results
 
 
-    def getPhysMetrics(self,startdate,endDate=None,metrics=None):
+    def phys_metrics(self, startdate, enddate=None, metrics=None):
         """
         Get one ore more physiological data metrics (steps, heartrate, calories, skin_temp, gsr) for a single day or
         range of days, and return an object containing those metrics, along with the start time, end time, and timezones
@@ -177,7 +176,7 @@ class basisAPI:
         """
 
         # This is the structure of the returned dictionary
-        physMetrics = {'metrics': {}, 'starttime': None,'endtime': None, 'timezone_history' : []}
+        results = {'metrics': {}, 'starttime': None,'endtime': None, 'timezone_history' : []}
 
         # If metric exists and is not iterable (e.g. a string), make it so.
         if metrics and not hasattr(metrics, '__iter__'):
@@ -189,21 +188,21 @@ class basisAPI:
 
         # Create empty lists for each metric
         for metric in metrics:
-            physMetrics['metrics'][metric] = []
+            results['metrics'][metric] = []
 
         # Get all the data in range
-        data = self.physData(startdate,endDate)
+        data = self.phys_data(startdate, enddate)
 
         if data:
-            physMetrics['starttime'] = data[0]['starttime']
-            physMetrics['endtime'] = data[0]['endtime']
+            results['starttime'] = data[0]['starttime']
+            results['endtime'] = data[0]['endtime']
 
             for element in data:
-                physMetrics['starttime'] = min(physMetrics['starttime'], element['starttime'])
-                physMetrics['endtime'] = max(physMetrics['endtime'], element['endtime'])
-                physMetrics['timezone_history'] += element['timezone_history']
+                results['starttime'] = min(results['starttime'], element['starttime'])
+                results['endtime'] = max(results['endtime'], element['endtime'])
+                results['timezone_history'] += element['timezone_history']
 
                 for metric in metrics:
-                    physMetrics['metrics'][metric] +=  element['metrics'][metric]['values']
+                    results['metrics'][metric] +=  element['metrics'][metric]['values']
 
-        return physMetrics
+        return results
