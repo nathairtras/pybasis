@@ -1,6 +1,8 @@
 pybasis
 =======
 
+Forked from https://github.com/thomlake/pybasis
+
 Forked from https://github.com/jayweiler/pybasis
 
 Unofficial python library for accessing the Basis API at https://app.mybasis.com
